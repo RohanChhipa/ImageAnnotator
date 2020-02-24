@@ -15,7 +15,7 @@ export class ImageCanvasComponent implements AfterViewInit {
   imageCanvas: ElementRef;
 
   annotations = [];
-  public isDrawing = false;
+  isDrawing = false;
 
   ngAfterViewInit(): void {
     const divCanvas = this.imageCanvas.nativeElement;
@@ -24,8 +24,8 @@ export class ImageCanvasComponent implements AfterViewInit {
         tap((x: MouseEvent) => {
           this.isDrawing = true;
           this.annotations.push({
-            top: (x.offsetY / divCanvas.offsetHeight) * 100,
-            left: (x.offsetX / divCanvas.offsetWidth) * 100,
+            top: this.calculateSizeRatio(x.offsetY, divCanvas.offsetHeight),
+            left: this.calculateSizeRatio(x.offsetX, divCanvas.offsetWidth),
             width: 0,
             height: 0,
           });
@@ -40,21 +40,25 @@ export class ImageCanvasComponent implements AfterViewInit {
             ),
         ),
       ).subscribe((value: MouseEvent[]) => {
-      const dx = ((value[1].offsetX - value[0].offsetX) / divCanvas.offsetWidth) * 100;
-      const dy = ((value[1].offsetY - value[0].offsetY) / divCanvas.offsetHeight) * 100;
+
+      const dx = value[1].offsetX - value[0].offsetX;
+      const dy = value[1].offsetY - value[0].offsetY;
 
       const lastBlock = this.annotations[this.annotations.length - 1];
+      if (dy < 0) {
+        lastBlock.top = this.calculateSizeRatio(value[1].offsetY, divCanvas.offsetHeight);
+      }
 
-      lastBlock.height = Math.abs(dy);
-      lastBlock.width = Math.abs(dx);
+      if (dx < 0) {
+        lastBlock.left = this.calculateSizeRatio(value[1].offsetX, divCanvas.offsetWidth);
+      }
 
-      // if (dx < 0) {
-      //   lastBlock.left = value[1].offsetX;
-      // }
-      //
-      // if (dy < 0) {
-      //   lastBlock.top = value[1].offsetY;
-      // }
+      lastBlock.height = Math.abs(this.calculateSizeRatio(dy, divCanvas.offsetHeight));
+      lastBlock.width = Math.abs(this.calculateSizeRatio(dx, divCanvas.offsetWidth));
     });
+  }
+
+  private calculateSizeRatio(innerCoordinate: number, parentSize: number): number {
+    return (innerCoordinate / parentSize) * 100;
   }
 }
