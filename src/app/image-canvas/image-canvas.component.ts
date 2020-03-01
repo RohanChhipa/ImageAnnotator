@@ -11,7 +11,7 @@ export class ImageCanvasComponent implements AfterViewInit {
 
   @Input() imageSrc: string;
 
-  @ViewChild('canvas', {static: false})
+  @ViewChild('canvas')
   imageCanvas: ElementRef;
 
   annotations = [];
