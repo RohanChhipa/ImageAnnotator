@@ -1,12 +1,14 @@
-<div class="list-item-container">
+<ng-container class="list-item-container">
   <img [src]="imageSrc" alt="doc">
-  <div class="annotation-container">
+  <ng-container class="annotation-container">
     <div class="annotation" *ngFor="let block of annotations"
          [style.width.%]="block.width"
          [style.height.%]="block.height"
          [style.top.%]="block.top"
          [style.left.%]="block.left"
-         [style.z-index]="isDrawing ? 0 : 2"></div>
-  </div>
+         [style.z-index]="isDrawing ? 0 : 2"
+         (click)="onAnnotationClick(block)">
+    </div>
+  </ng-container>
   <div #canvas class="annotation-canvas"></div>
-</div>
+</ng-container>

@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Annotation } from 'src/app/models/annotation.model';
 
 @Component({
-    selector: 'app-document-image-list',
+    selector: 'ai-document-image-list',
     templateUrl: './document-image-list.component.html',
     styleUrls: ['./document-image-list.component.scss'],
 })
-export class DocumentImageListComponent implements OnInit, OnDestroy {
+export class DocumentImageListComponent {
 
     images = [
         '../assets/images/kim2007-1.png',
@@ -15,16 +16,7 @@ export class DocumentImageListComponent implements OnInit, OnDestroy {
         '../assets/images/kim2007-5.png',
     ];
 
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
-    ngOnDestroy(): void {
-    }
-
-    documentImageLoaded(documentIndex: number) {
-        console.log(documentIndex);
+    public onAnnotationClick(annotation: Annotation): void {
+        console.log(annotation);
     }
 }
